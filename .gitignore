@@ -1,0 +1,8 @@
+#for temp files
+*~
+
+#executable
+code/main
+
+#objects
+*.o
