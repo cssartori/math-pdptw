@@ -1,0 +1,45 @@
+## Template for parameter description file for Iterated Race.
+##
+## The format is one parameter per line. Each line contains:
+##
+## 1: Name of the parameter. An unquoted alphanumeric string,
+##    example: ants
+
+## 2: Switch to pass the parameter. A quoted (possibly empty) string, 
+##    if the value and the switch must be separated, add a space at
+##    the end of the string. Example : "--version1 --ants "
+
+## 3: Type. An unquoted single letter, among 
+##     i: Integer, c: categorical, o: ordinal, r: real.
+
+## 4: For c and o: All possible values, that is, a variable number of
+##    quoted or unquoted strings separated by commas within
+##    parenthesis. Empty strings and strings containing commas or
+##    spaces must be quoted.
+##    For i,r: a pair of unquoted numbers representing minimum and
+##    maximum values. 
+
+## 5: A conditional parameter can be defined according to the values of
+##    one or several other parameters.  This is done by adding a
+##    character '|' followed by an R expression involving the names of
+##    other parameters. This expression must return TRUE if the 
+##    condition is satisfied, FALSE otherwise.
+
+
+# 1:				2:						3:		4:					5:
+spp              	"--use-spp "			c  		(true, false)			
+sol_con 	        "--sol-constructor "    c  		(trivial, greedy)
+ppsize				"--ppsize "		   		r		(0.00, 1.00)		
+prob_eval			"--prob-eval "	 		r		(0.20, 0.80)					
+ges_max_iter        "--ges-max-iter "       c  		(2000, 3000, 4000, 5000, 6000)	
+ges_ppsize          "--ges-ppsize "         r       (0.00, 1.00)
+lns_min_q           "--lns-min-q "          i       (1,5)
+lns_max_mult		"--lns-max-mult-q "		r		(0.10, 0.40)
+lns_max_iter        "--lns-max-iter "       i       (500,1500)					
+lns_lsize           "--lns-lsize "          i       (500,2000)   				
+lns_weight_shaw     "--lns-weight-shaw "    i       (0,10)
+lns_weight_random   "--lns-weight-random "  i       (0,10)
+lns_min_k			"--lns-min-k "		 	i		(1,6)
+lns_max_k			"--lns-max-k "			i		(1,6)
+
+

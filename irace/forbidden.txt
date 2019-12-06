@@ -1,0 +1,3 @@
+(ppsize == 0.0 & prob_eval > 0.20)
+((lns_weight_shaw + lns_weight_random) > 10)
+(lns_min_k >= lns_max_k)

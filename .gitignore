@@ -1,8 +1,6 @@
-#for temp files
-*~
-
-#executable
+# for c++ files
+*.o
 code/main
 
-#objects
-*.o
+# for temp files
+*~
