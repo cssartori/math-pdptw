@@ -6,7 +6,7 @@
 #include <random>
 
 //Comment this line to stop printing debugs
-#define DEBUG
+//#define DEBUG
 #ifdef DEBUG
 #define printd(str) printf str
 #else
@@ -27,6 +27,11 @@ namespace Def{
 	
 	const std::string CONSTRUCTOR_GREEDY = "greedy";
 	const std::string CONSTRUCTOR_TRIVIAL = "trivial";
+
+	const std::string AGES_ORIGINAL = "original";
+	const std::string AGES_NEW = "new";
+	const int AGES_ORIGINAL_TYPE = 1;
+	const int AGES_NEW_TYPE = 2;
 
 	const double VEHICLE_COST = 1e5;
 	const int NO_NODE = -1;

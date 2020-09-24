@@ -50,8 +50,15 @@ ResultInfo Algorithm::solve(){
 
 	map< boost::dynamic_bitset<>, Route > route_pool;	
 	if(par.use_spp) extract_routes(s, route_pool);
+
+	size_t ages_pert_size;
+	if(par.alg_ages == Def::AGES_ORIGINAL_TYPE){
+		ages_pert_size = par.ges_psize;
+	}else{
+		ages_pert_size = static_cast<size_t>(par.ges_ppsize*data.nreq);
+	}
 	
-	AGES ages(data, rng, par.ges_max_iter, static_cast<size_t>(par.ges_ppsize*data.nreq), par.prob_eval);
+	AGES ages(data, rng, par.ges_max_iter, ages_pert_size, par.prob_eval);
 	LNS lns(data, par, rng, par.lns_min_q, static_cast<size_t>(par.lns_max_mult*data.nreq), par.lns_min_k, par.lns_max_k, par.lns_lsize, par.lns_max_iter);
 	
 	double elap_sec = t.elapsed_seconds();
@@ -78,7 +85,12 @@ ResultInfo Algorithm::solve(){
 		printd(("%li - Best Solution: %.2f\n", iter, sb.cost));
 		size_t prev_sol_size = s.size();
 		printd(("GES\n"));
-		ages.solve(s, t, par.max_time);
+		if(par.alg_ages == Def::AGES_NEW_TYPE){
+			ages.solve(s, t, par.max_time);
+		}else{
+			ages.original_solve(s, t, par.max_time, par.prob_eval);
+		}
+			
 		printd(("*Cost = %.2f | %li | %i | %i\n", s.cost, s.size(), Validator::validate_solution(data,s), s.node_set.all()));
 
 		rinfo.ges_total_time += (t.elapsed_seconds() - tb_ges);
@@ -133,7 +145,11 @@ ResultInfo Algorithm::solve(){
 			vector<size_t> nodes_routes(data.nnod, Def::NO_ROUTE);
 			//TODO: this can probably be improved by keeping the information as we go
 			Operation::get_all_nodes_routes(data, s, nodes_routes);
-			Perturb::sampled_perturb(data, par.ppsize*data.nreq, s, nodes_routes, perturb_count, par.prob_eval, rng);
+			if(par.alg_ages == Def::AGES_NEW_TYPE){
+				Perturb::sampled_perturb(data, par.ppsize*data.nreq, s, nodes_routes, perturb_count, par.prob_eval, rng);
+			}else{
+				Perturb::original_perturb(data, par.ppsize*data.nreq, par.prob_eval, s, perturb_count, nodes_routes, rng);
+			}
 		}
 		
 		iter++;

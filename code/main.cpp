@@ -56,6 +56,7 @@ string dtos(double value, unsigned int precision=2){
 
 Parameters read_parameters(int argc, char** argv){
 	Parameters par;
+	std::string str_alg_ages = Def::AGES_NEW;
 	
 	namespace po = boost::program_options;
 	po::options_description desc("parameters");
@@ -69,21 +70,25 @@ Parameters read_parameters(int argc, char** argv){
 		 ("define the RNG seed. Default: " + to_string(par.seed)).c_str())
 		("time,t", po::value<double>(&par.max_time),
 		 ("maximum running time in seconds. Default: " + dtos(par.max_time) ).c_str())
-		("sol-constructor", po::value<string>(&par.initial_constructor),
-		 ("constructor used to generate the initial solution: trivial, greedy. Default: " + par.initial_constructor).c_str())
-		("use-spp", po::value<bool>(&par.use_spp),
+		// ("sol-constructor", po::value<string>(&par.initial_constructor),
+		//  ("constructor used to generate the initial solution: trivial, greedy. Default: " + par.initial_constructor).c_str())
+		("alg-use-spp", po::value<bool>(&par.use_spp),
 		 ("Wheter to use SP model phase during the search: true, false. Default: " + (par.use_spp ? string("true") : string("false"))).c_str())
-		("ppsize", po::value<double>(&par.ppsize),
+		("alg-pert-prob", po::value<double>(&par.prob_eval),
+		 ("Probability for the pertubation. For \"original\" is the prob. of a 'move shift'; for \"new\" is the bias mu. Default: " + dtos(par.prob_eval) ).c_str())
+		("alg-ages", po::value<string>(&str_alg_ages),
+		 ("Print type format: " + Def::AGES_ORIGINAL + " , " + Def::AGES_NEW + " . Default: " + par.print_type).c_str())
+		("alg-perc-pert-size", po::value<double>(&par.ppsize),
 		 ("Percentage P of requests to be perturbed in the main heuristic: P*R, R is the num. of requests. Default: " + dtos(par.ppsize)).c_str())
-		("prob-eval", po::value<double>(&par.prob_eval),
-		 ("Probability of evaluating a move in perturbation for both GES and matheuristic. Default: " + dtos(par.prob_eval) ).c_str())
-		("ges-max-iter", po::value<size_t>(&par.ges_max_iter),
-		 ("Maximum number of iterations without improvement for GES heuristic. Default: " + to_string(par.ges_max_iter)).c_str())
-		("ges-ppsize", po::value<double>(&par.ges_ppsize),
-		 ("Percentage P of requests to be perturbed in GES heuristic: P*R, R num. requests. Default: " + dtos(par.ges_ppsize)).c_str())
+		("ages-max-iter", po::value<size_t>(&par.ges_max_iter),
+		 ("Maximum number of iterations without improvement for AGES heuristic. Default: " + to_string(par.ges_max_iter)).c_str())
+		("ages-pert-size", po::value<size_t>(&par.ges_psize),
+		 ("Number of requests to be moved in a perturbation of the AGES. Used in combination to \"original\" AGES. Default: " + dtos(par.ges_ppsize)).c_str())
+		("ages-perc-pert-size", po::value<double>(&par.ges_ppsize),
+		 ("Percentage P of requests to be perturbed in AGES heuristic: P*R, R num. requests. Used in combination to the \"new\" AGES. Default: " + dtos(par.ges_ppsize)).c_str())
 		("lns-min-q", po::value<int>(&par.lns_min_q),
 		 ("Minimum number of requests to remove in LNS. Default: "+ to_string(par.lns_min_q)).c_str())
-		("lns-max-mult-q", po::value<double>(&par.lns_max_mult),
+		("lns-max-perc-q", po::value<double>(&par.lns_max_mult),
 		 ("Maximum percentage of requests to be removed in LNS. Default: "+dtos(par.lns_max_mult) ).c_str())
 		("lns-min-k", po::value<int>(&par.lns_min_k),
 		 ("Minimum number of routes for regret heuristic in LNS. Default: "+ to_string(par.lns_min_k)).c_str())
@@ -115,6 +120,15 @@ Parameters read_parameters(int argc, char** argv){
 	if (vm.count("help")) {
 		cout << desc << endl;
 		exit(EXIT_SUCCESS);
+	}
+
+	if(str_alg_ages == Def::AGES_ORIGINAL){
+		par.alg_ages = Def::AGES_ORIGINAL_TYPE;
+		if(vm.count("ages-perc-pert-size")){
+			printf("**Warning: you are using parameter 'ages-perc-pert-size' with AGES 'original', but it only works for AGES 'new'.");
+		}
+	}else if(vm.count("ages-pert-size")){
+		printf("**Warning: you are using parameter 'ages-pert-size' with AGES 'new', but it only works for AGES 'original'.");
 	}
 	
 	// ASSERTS section

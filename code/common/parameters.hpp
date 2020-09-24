@@ -16,6 +16,9 @@ struct Parameters{
 	double prob_eval = 0.57;
 	size_t ges_max_iter = 4000;
 	double ges_ppsize = 0.15;
+	size_t ges_psize = 100;
+	int alg_ages=Def::AGES_NEW_TYPE;
+	
 	int lns_min_q = 2;
 	int lns_min_k = 1;
 	int lns_max_k = 4;

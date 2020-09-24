@@ -90,20 +90,24 @@ public:
 	}
 
 	void print_human_format(const Data& data){
-		printf("SI: %li | %.2f | %.2f | t=%.2f | valid=%i\nSB: %li | %.2f | %.2f | t=%.2f | valid=%i\nIterations: %li\nSPP: %li\nPool: %li\n",
+		printf("===== RESULTS =====\n"
+			   "-Initial Solution: %s\n\tVehicles: %li\n\tCost: %.2f\n\tFull cost: %.2f\n\tTime: %.2f\n"
+			   "----------\n"
+			   "-Final Solution: %s\n\tVehicles: %li\n\tCost: %.2f\n\tFull cost: %.2f\n\tTime: %.2f\n\tIterations: %li\n\tPool: %li\n\tSPP: %li\n"
+			   "----------\n",
+			   Validator::validate_solution(data,this->si) ? "valid" : "invalid",
 			   this->si.size(),
 			   this->si.cost-Def::VEHICLE_COST*this->si.size(),
 			   this->si.cost,
 			   this->initial_time,
-			   Validator::validate_solution(data,this->si),
+			   Validator::validate_solution(data,this->sb) ? "valid" : "invalid",
 			   this->sb.size(),
 			   this->sb.cost-Def::VEHICLE_COST*this->sb.size(),
 			   this->sb.cost,
 			   this->total_time,
-			   Validator::validate_solution(data,this->sb),
 			   this->iter,
-			   this->spp_num_improve,
-			   this->spp_pool_size);
+			   this->spp_pool_size,
+			   this->spp_num_improve);
 	}
 	
 };
