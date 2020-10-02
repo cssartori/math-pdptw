@@ -35,6 +35,8 @@ int main(int argc, char** argv){
 	
 	if(par.print_type == Def::PRINT_TABLE_FORMAT){
 		rinfo.print_table_format(data);
+	}else if(par.print_type == Def::PRINT_IRACE_FORMAT){
+		rinfo.print_irace_format(data);
 	}else{
 		rinfo.print_human_format(data);
 	}
@@ -148,7 +150,7 @@ Parameters read_parameters(int argc, char** argv){
 	assert(par.lns_max_iter > 0);
 	assert(par.lns_lsize >= 0);
 	assert(par.lns_wrem[LNS::REM_SHAW_TYPE] >= 0 && par.lns_wrem[LNS::REM_RANDOM_TYPE] >= 0 && (par.lns_wrem[LNS::REM_SHAW_TYPE] + par.lns_wrem[LNS::REM_RANDOM_TYPE] <= 10));
-	assert(par.print_type == Def::PRINT_HUMAN_FORMAT || par.print_type == Def::PRINT_TABLE_FORMAT);
+	assert(par.print_type == Def::PRINT_HUMAN_FORMAT || par.print_type == Def::PRINT_TABLE_FORMAT || par.print_type == Def::PRINT_IRACE_FORMAT);
 
 	par.lns_wrem[LNS::REM_WORST_TYPE] = 10 - par.lns_wrem[LNS::REM_SHAW_TYPE] - par.lns_wrem[LNS::REM_RANDOM_TYPE];
 	
