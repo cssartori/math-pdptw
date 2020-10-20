@@ -18,10 +18,20 @@ int main(int argc, char** argv){
 	Parameters par = read_parameters(argc, argv);
 	
 	Data data;
-    if (data.read_from_stdin(par.inst_format) == Data::READ_FAIL) {
-		printf("Failed reading from stdin.\n");
-		return EXIT_FAILURE;
-    }
+        if (par.inst_path == "") {
+           printf("Reading instance from stdin.\n");
+           if (data.read_from_stdin(par.inst_format) == Data::READ_FAIL) {
+                       printf("Failed reading from stdin.\n");
+                       return EXIT_FAILURE;
+           }
+        } else {
+           printf("Reading instance from file '%s'.\n", par.inst_path.c_str());
+           if (data.read_from_file(par.inst_path.c_str(), par.inst_format) == Data::READ_FAIL) {
+                       printf("Failed reading from the file '%s'.\n", par.inst_path.c_str());
+                       return EXIT_FAILURE;
+           }
+        }
+   cout.precision(16);
 			
 	printd(("Pre-processing.\n"));
 	// Data pre-processing
@@ -65,6 +75,7 @@ Parameters read_parameters(int argc, char** argv){
 	//TODO: update this descriptions
 	desc.add_options()
 		("help,h", "print this help info")
+                ("instance,i", po::value<string>(&par.inst_path), "Path to the instance file. If not set, read from stdin.")
 		("format,f", po::value<string>(&par.inst_format),
 		 ("the instance format: " + Def::INST_LI_LIM_FORMAT +
 		  " (Li & Lim) , " + Def::INST_BCP_FORMAT + " (Rokpe BCP), " + Def::INST_UMOVME_FORMAT + " (uMov.me) and " + Def::INST_SB_FORMAT + " (Sartori & Buriol). Default: "+par.inst_format).c_str())

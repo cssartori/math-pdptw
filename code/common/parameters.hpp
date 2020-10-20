@@ -5,6 +5,7 @@
 #include <vector>
 
 struct Parameters{
+        std::string inst_path = "";
 	std::string inst_format = Def::INST_LI_LIM_FORMAT;
 	double max_time = 60.0;
 	std::mt19937_64::result_type seed = 0;
