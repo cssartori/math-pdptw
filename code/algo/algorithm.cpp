@@ -58,8 +58,8 @@ ResultInfo Algorithm::solve(){
 		ages_pert_size = static_cast<size_t>(par.ges_ppsize*data.nreq);
 	}
 	
-	AGES ages(data, rng, par.ges_max_iter, ages_pert_size, par.prob_eval);
-	LNS lns(data, par, rng, par.lns_min_q, static_cast<size_t>(par.lns_max_mult*data.nreq), par.lns_min_k, par.lns_max_k, par.lns_lsize, par.lns_max_iter);
+	AGES ages(data, rng, par.ges_max_iter, std::max(ages_pert_size, (size_t)1), par.prob_eval);
+	LNS lns(data, par, rng, par.lns_min_q, std::max(static_cast<size_t>(par.lns_max_mult*data.nreq), (size_t)1), par.lns_min_k, par.lns_max_k, par.lns_lsize, par.lns_max_iter);
 	
 	double elap_sec = t.elapsed_seconds();
 	double obest = s.cost;

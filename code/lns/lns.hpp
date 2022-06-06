@@ -47,6 +47,7 @@ public:
 	LNS(const Data& data_, const Parameters &par_, std::mt19937_64& _rng, int _min_q, int _max_q, int _min_k, int _max_k, int _lsize, int _max_iter) : data(data_), par(par_), rng(_rng){
 		min_q = _min_q;
 		max_q = _max_q;
+		if(min_q > max_q) min_q = max_q;
 		min_k = _min_k;
 		max_k = _max_k;
 		lsize = _lsize;
